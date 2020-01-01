@@ -60,20 +60,7 @@ void loop() {
 
   DispDashboard();
 
-  // Print to serial
-  Serial.print("Temp: ");
-  Serial.print(sTemp, 0);
-  Serial.print("\tHumidity: ");
-  Serial.print(sHumidity, 0);
-  Serial.print("\tGas: ");
-  Serial.print(sAir, 0);
-  
-//  Serial.print("\t: ");
-//  Serial.print(joyLR, 0);
-//  Serial.print("\t: ");
-//  Serial.print(joyUD, 0);
-  
-  Serial.println(" ");
+  SerialOutput();
 }
 
 void DispDashboard() {
@@ -90,4 +77,21 @@ void DispDashboard() {
   lcd.setCursor(0, 1);
   lcd.print("UT:");
   lcd.print(millis() / 1000);
+}
+
+void SerialOutput() {
+  // Print to serial
+  Serial.print("Temp: ");
+  Serial.print(sTemp, 0);
+  Serial.print("\tHumidity: ");
+  Serial.print(sHumidity, 0);
+  Serial.print("\tGas: ");
+  Serial.print(sAir, 0);
+  
+//  Serial.print("\t: ");
+//  Serial.print(joyLR, 0);
+//  Serial.print("\t: ");
+//  Serial.print(joyUD, 0);
+  
+  Serial.println(" ");
 }
