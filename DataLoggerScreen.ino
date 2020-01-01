@@ -57,6 +57,11 @@ void loop() {
   lcd.print(" G:");
   lcd.print(sAir, 0);
 
+  // Show uptime on bottom lcd row
+  lcd.setCursor(0, 1);
+  lcd.print("UT:");
+  lcd.print(millis() / 1000);
+
   // Print to serial
   Serial.print("Temp: ");
   Serial.print(sTemp, 0);
