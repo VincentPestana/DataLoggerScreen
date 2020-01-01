@@ -11,6 +11,8 @@
 // Define pins
 #define DHTPIN 2
 #define GasPin 4
+#define JoyLR 1
+#define JoyUD 0
 
 // Uncomment the type of sensor in use:
 #define DHTTYPE    DHT11     // DHT 11
@@ -47,7 +49,14 @@ void loop() {
 
   // Air sensor
   float sAir = analogRead(GasPin);
+  // Controls
+  float joyLR = analogRead(JoyLR);
+  float joyUD = analogRead(JoyUD);
 
+//  Serial.print("\t: ");
+//  Serial.print(joyLR, 0);
+//  Serial.print("\t: ");
+//  Serial.print(joyUD, 0);
   // LCD Display
   lcd.setCursor(0, 0);
   lcd.print("H:");
