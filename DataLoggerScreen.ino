@@ -25,6 +25,10 @@ LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
 
 uint32_t delayMS;
 
+float sHumidity;
+float sTemp;
+float sAir;
+
 void setup() {
   Serial.begin(9600);
   // Initialize device.
@@ -40,23 +44,39 @@ void setup() {
 void loop() {
   // Delay between measurements.
   delay(delayMS);
-  
+
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  float sHumidity = dht.readHumidity();
+  sHumidity = dht.readHumidity();
   // Read temperature as Celsius (the default)
-  float sTemp = dht.readTemperature();
+  sTemp = dht.readTemperature();
 
   // Air sensor
-  float sAir = analogRead(GasPin);
+  sAir = analogRead(GasPin);
+  
   // Controls
   float joyLR = analogRead(JoyLR);
   float joyUD = analogRead(JoyUD);
 
+  DispDashboard();
+
+  // Print to serial
+  Serial.print("Temp: ");
+  Serial.print(sTemp, 0);
+  Serial.print("\tHumidity: ");
+  Serial.print(sHumidity, 0);
+  Serial.print("\tGas: ");
+  Serial.print(sAir, 0);
+  
 //  Serial.print("\t: ");
 //  Serial.print(joyLR, 0);
 //  Serial.print("\t: ");
 //  Serial.print(joyUD, 0);
+  
+  Serial.println(" ");
+}
+
+void DispDashboard() {
   // LCD Display
   lcd.setCursor(0, 0);
   lcd.print("H:");
@@ -70,12 +90,4 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print("UT:");
   lcd.print(millis() / 1000);
-
-  // Print to serial
-  Serial.print("Temp: ");
-  Serial.print(sTemp, 0);
-  Serial.print("\tHumidity: ");
-  Serial.print(sHumidity, 0);
-  Serial.print("\tGas: ");
-  Serial.println(sAir, 0);
 }
