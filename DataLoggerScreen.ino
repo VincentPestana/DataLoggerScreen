@@ -39,26 +39,23 @@ void loop() {
   // Delay between measurements.
   delay(delayMS);
   
-
-
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float sHumidity = dht.readHumidity();
   // Read temperature as Celsius (the default)
   float sTemp = dht.readTemperature();
 
-
   // Air sensor
-  float gasData = analogRead(GasPin);
+  float sAir = analogRead(GasPin);
 
   // LCD Display
   lcd.setCursor(0, 0);
   lcd.print("H:");
   lcd.print(sHumidity, 0);
-  lcd.print("T:");
+  lcd.print(" T:");
   lcd.print(sTemp, 0);
-  lcd.print("G:");
-  lcd.print(gasData, 1);
+  lcd.print(" G:");
+  lcd.print(sAir, 0);
 
   // Print to serial
   Serial.print("Temp: ");
@@ -66,5 +63,5 @@ void loop() {
   Serial.print("\tHumidity: ");
   Serial.print(sHumidity, 0);
   Serial.print("\tGas: ");
-  Serial.println(gasData, 0);
+  Serial.println(sAir, 0);
 }
