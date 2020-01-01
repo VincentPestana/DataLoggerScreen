@@ -60,4 +60,11 @@ void loop() {
   lcd.print("G:");
   lcd.print(gasData, 1);
 
+  // Print to serial
+  Serial.print("Temp: ");
+  Serial.print(sTemp, 0);
+  Serial.print("\tHumidity: ");
+  Serial.print(sHumidity, 0);
+  Serial.print("\tGas: ");
+  Serial.println(gasData, 0);
 }
