@@ -6,15 +6,20 @@
 #include <DHT.h>
 #include <DHT_U.h>
 
+#include <LiquidCrystal.h>
+
 // Define pins
 #define DHTPIN 2
+#define GasPin 4
 
 // Uncomment the type of sensor in use:
 #define DHTTYPE    DHT11     // DHT 11
 //#define DHTTYPE    DHT22     // DHT 22 (AM2302)
 //#define DHTTYPE    DHT21     // DHT 21 (AM2301)
 
-DHT_Unified dht(DHTPIN, DHTTYPE);
+DHT dht(DHTPIN, DHTTYPE);
+
+LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
 
 uint32_t delayMS;
 
@@ -22,37 +27,37 @@ void setup() {
   Serial.begin(9600);
   // Initialize device.
   dht.begin();
-  Serial.println(F("DHTxx Unified Sensor Example"));
-  // Print temperature sensor details.
-  sensor_t sensor;
-  dht.temperature().getSensor(&sensor);
   // Set delay between sensor readings based on sensor details.
-  delayMS = sensor.min_delay / 1000;
+  delayMS = 1000;
+
+  // LCD Startup
+  lcd.begin(16, 2); //Initialize the 16x2 LCD
+  lcd.clear();  //Clear any old data displayed on the LCD
 }
 
 void loop() {
   // Delay between measurements.
   delay(delayMS);
   
-  // Get temperature event and print its value.
-  sensors_event_t event;
-  dht.temperature().getEvent(&event);
-  if (isnan(event.temperature)) {
-    Serial.println(F("Error reading temperature!"));
-  }
-  else {
-    Serial.print(F("Temperature: "));
-    Serial.print(event.temperature);
-    Serial.println(F("°C"));
-  }
-  // Get humidity event and print its value.
-  dht.humidity().getEvent(&event);
-  if (isnan(event.relative_humidity)) {
-    Serial.println(F("Error reading humidity!"));
-  }
-  else {
-    Serial.print(F("Humidity: "));
-    Serial.print(event.relative_humidity);
-    Serial.println(F("%"));
-  }
+
+
+  // Reading temperature or humidity takes about 250 milliseconds!
+  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+  float sHumidity = dht.readHumidity();
+  // Read temperature as Celsius (the default)
+  float sTemp = dht.readTemperature();
+
+
+  // Air sensor
+  float gasData = analogRead(GasPin);
+
+  // LCD Display
+  lcd.setCursor(0, 0);
+  lcd.print("H:");
+  lcd.print(sHumidity, 0);
+  lcd.print("T:");
+  lcd.print(sTemp, 0);
+  lcd.print("G:");
+  lcd.print(gasData, 1);
+
 }
