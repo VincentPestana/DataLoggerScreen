@@ -65,6 +65,7 @@ void loop() {
 
 void DispDashboard() {
   // LCD Display
+  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("H:");
   lcd.print(sHumidity, 0);
