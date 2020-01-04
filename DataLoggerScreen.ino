@@ -25,6 +25,13 @@ LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
 
 uint32_t delayMS;
 
+// Screen type being shown
+//  0 - dashboard
+int screen;
+
+float joyLR;
+float joyUD;
+
 float sHumidity;
 float sTemp;
 float sAir;
@@ -39,6 +46,8 @@ void setup() {
   // LCD Startup
   lcd.begin(16, 2); //Initialize the 16x2 LCD
   lcd.clear();  //Clear any old data displayed on the LCD
+
+  screen = 0;
 }
 
 void loop() {
@@ -55,10 +64,26 @@ void loop() {
   sAir = analogRead(GasPin);
   
   // Controls
-  float joyLR = analogRead(JoyLR);
-  float joyUD = analogRead(JoyUD);
+  joyLR = map(analogRead(JoyLR), 0, 1006, 0, 10);
+  joyUD = map(analogRead(JoyUD), 0, 1006, 0, 10);
 
-  DispDashboard();
+  if (joyLR > 6) {
+    // Right
+    // TODO: Move max into var
+    if (screen < 3)
+      screen++;
+  } else if (joyLR < 4) {
+    // Left
+    if (screen > 0)
+      screen--;
+  }
+
+  // Set what info is displayed on lcd
+  // TODO: this is just for testing
+  if (screen == 0)
+    DispDashboard();
+  else if (screen == 1)
+    DispAir();
 
   SerialOutput();
 }
@@ -80,6 +105,11 @@ void DispDashboard() {
   lcd.print(millis() / 1000);
 }
 
+void DispAir() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+}
+
 void SerialOutput() {
   // Print to serial
   Serial.print("Temp: ");
@@ -89,10 +119,10 @@ void SerialOutput() {
   Serial.print("\tGas: ");
   Serial.print(sAir, 0);
   
-//  Serial.print("\t: ");
-//  Serial.print(joyLR, 0);
-//  Serial.print("\t: ");
-//  Serial.print(joyUD, 0);
+  Serial.print("\t: ");
+  Serial.print(joyLR, 0);
+  Serial.print("\t: ");
+  Serial.print(joyUD, 0);
   
   Serial.println(" ");
 }
