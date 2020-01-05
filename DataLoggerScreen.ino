@@ -47,7 +47,11 @@ void setup() {
   lcd.begin(16, 2); //Initialize the 16x2 LCD
   lcd.clear();  //Clear any old data displayed on the LCD
 
+  // Variable initialization
   screen = 0;
+  sHumLow = 1000;
+  sTempLow = 1000;
+  sAirLow = 1000;
 }
 
 void loop() {
@@ -66,9 +70,18 @@ void loop() {
   // Minimums and maximums
   if (sHumLow > sHumCurr)
     sHumLow = sHumCurr;
-
   if (sHumHigh < sHumCurr)
     sHumHigh = sHumCurr;
+
+  if (sTempLow > sTempCurr)
+    sTempLow = sTempCurr;
+  if (sTempHigh < sTempCurr)
+    sTempHigh = sTempCurr;
+
+  if (sAirLow > sAirCurr)
+    sAirLow = sAirCurr;
+  if (sAirHigh < sAirCurr)
+    sAirHigh = sAirCurr;
   
   // Controls
   joyLR = map(analogRead(JoyLR), 0, 1006, 0, 10);
@@ -77,20 +90,20 @@ void loop() {
   if (joyLR > 6) {
     // Right
     // TODO: Move max into var
-    if (screen < 3)
-      screen++;
-  } else if (joyLR < 4) {
-    // Left
     if (screen > 0)
       screen--;
+  } else if (joyLR < 4) {
+    // Left
+    if (screen < 3)
+      screen++;
   }
 
   // Set what info is displayed on lcd
   // TODO: this is just for testing
   if (screen == 0)
     DispDashboard();
-  else if (screen == 1)
-    DispAir();
+  else
+    DispDetails(screen);
 
   SerialOutput();
 }
@@ -100,11 +113,11 @@ void DispDashboard() {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("H:");
-  lcd.print(sHumidity, 0);
+  lcd.print(sHumCurr, 0);
   lcd.print(" T:");
-  lcd.print(sTemp, 0);
+  lcd.print(sTempCurr, 0);
   lcd.print(" G:");
-  lcd.print(sAir, 0);
+  lcd.print(sAirCurr, 0);
 
   // Show uptime on bottom lcd row
   lcd.setCursor(0, 1);
@@ -112,19 +125,55 @@ void DispDashboard() {
   lcd.print(millis() / 1000);
 }
 
-void DispAir() {
+//  show averages
+//  1 - Humidity
+//  2 - Temperature
+//  3 - Air
+void DispDetails(int screenType) {
   lcd.clear();
   lcd.setCursor(0, 0);
+
+  lcd.print("Min Avg Max");
+  lcd.setCursor(0, 1);
+  
+  switch (screenType) {
+    case 1:
+      lcd.print(sHumLow);
+      lcd.print(" ");
+      lcd.print(sHumCurr);
+      lcd.print(" ");
+      lcd.print(sHumHigh);
+      break;
+    case 2:
+      lcd.print(sTempLow);
+      lcd.print(" ");
+      lcd.print(sTempCurr);
+      lcd.print(" ");
+      lcd.print(sTempHigh);
+      break;
+    case 3:
+      lcd.print(sAirLow);
+      lcd.print(" ");
+      lcd.print(sAirCurr);
+      lcd.print(" ");
+      lcd.print(sAirHigh);
+      break;
+    default:
+      DispDashboard();
+      break;
+  }
+  
+  
 }
 
 void SerialOutput() {
   // Print to serial
   Serial.print("Temp: ");
-  Serial.print(sTemp, 0);
+  Serial.print(sTempCurr, 0);
   Serial.print("\tHumidity: ");
-  Serial.print(sHumidity, 0);
+  Serial.print(sHumCurr, 0);
   Serial.print("\tGas: ");
-  Serial.print(sAir, 0);
+  Serial.print(sAirCurr, 0);
   
   Serial.print("\t: ");
   Serial.print(joyLR, 0);
