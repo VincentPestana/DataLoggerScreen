@@ -32,9 +32,9 @@ int screen;
 float joyLR;
 float joyUD;
 
-float sHumidity;
-float sTemp;
-float sAir;
+float sHumCurr, sTempCurr, sAirCurr;
+
+float sHumLow, sHumHigh, sTempLow, sTempHigh, sAirLow, sAirHigh;
 
 void setup() {
   Serial.begin(9600);
@@ -56,12 +56,19 @@ void loop() {
 
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  sHumidity = dht.readHumidity();
+  sHumCurr = dht.readHumidity();
   // Read temperature as Celsius (the default)
-  sTemp = dht.readTemperature();
+  sTempCurr = dht.readTemperature();
 
   // Air sensor
-  sAir = analogRead(GasPin);
+  sAirCurr = analogRead(GasPin);
+
+  // Minimums and maximums
+  if (sHumLow > sHumCurr)
+    sHumLow = sHumCurr;
+
+  if (sHumHigh < sHumCurr)
+    sHumHigh = sHumCurr;
   
   // Controls
   joyLR = map(analogRead(JoyLR), 0, 1006, 0, 10);
