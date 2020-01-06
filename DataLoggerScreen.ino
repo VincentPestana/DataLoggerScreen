@@ -117,7 +117,8 @@ void loop() {
 }
 
 void DispDashboard() {
-  
+  dispCounter++;
+
   // LCD Display
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -132,6 +133,14 @@ void DispDashboard() {
   lcd.setCursor(0, 1);
   lcd.print("UT:");
   lcd.print(millis() / 1000);
+
+  if (dispCounter > 10) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Humidity  Temp");
+    lcd.setCursor(0, 1);
+    lcd.print("Gas/o2  Sensor");
+  }
 }
 
 //  show averages
