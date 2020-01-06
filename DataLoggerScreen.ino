@@ -36,6 +36,8 @@ float sHumCurr, sTempCurr, sAirCurr;
 
 float sHumLow, sHumHigh, sTempLow, sTempHigh, sAirLow, sAirHigh;
 
+uint16_t dispCounter;
+
 void setup() {
   Serial.begin(9600);
   // Initialize device.
@@ -52,6 +54,12 @@ void setup() {
   sHumLow = 1000;
   sTempLow = 1000;
   sAirLow = 1000;
+
+  // Welcome message and give gas sensor some time to warm up
+  lcd.print("  Enviro Sense");
+  lcd.setCursor(0, 1);
+  lcd.print("  Temp Hum Gas");
+  delay(10000);
 }
 
 void loop() {
@@ -99,7 +107,7 @@ void loop() {
   }
 
   // Set what info is displayed on lcd
-  // TODO: this is just for testing
+  // TODO: this is just for testing 
   if (screen == 0)
     DispDashboard();
   else
@@ -109,6 +117,7 @@ void loop() {
 }
 
 void DispDashboard() {
+  
   // LCD Display
   lcd.clear();
   lcd.setCursor(0, 0);
