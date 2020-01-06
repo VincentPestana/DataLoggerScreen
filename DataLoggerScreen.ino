@@ -137,9 +137,11 @@ void DispDashboard() {
   if (dispCounter > 10) {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Humidity  Temp");
+    lcd.print(" Humidity  Temp");
     lcd.setCursor(0, 1);
-    lcd.print("Gas/o2  Sensor");
+    lcd.print(" Gas/O2  Sensor");
+    delay(3000);
+    dispCounter = 0;
   }
 }
 
