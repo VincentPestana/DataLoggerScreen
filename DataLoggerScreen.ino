@@ -137,6 +137,7 @@ void DispDashboard() {
   if (dispCounter > 10) {
     lcd.clear();
     lcd.setCursor(0, 0);
+
     lcd.print(" Humidity  Temp");
     lcd.setCursor(0, 1);
     lcd.print(" Gas/O2  Sensor");
@@ -153,36 +154,35 @@ void DispDetails(int screenType) {
   lcd.clear();
   lcd.setCursor(0, 0);
 
-  lcd.print("Min Avg Max");
+  lcd.print("Min   Avg   Max");
   lcd.setCursor(0, 1);
   
   switch (screenType) {
     case 1:
-      lcd.print(sHumLow);
-      lcd.print(" ");
-      lcd.print(sHumCurr);
-      lcd.print(" ");
-      lcd.print(sHumHigh);
+      lcd.print(sHumLow, 0);
+      lcd.print("   ");
+      lcd.print(sHumCurr, 0);
+      lcd.print("   ");
+      lcd.print(sHumHigh, 0);
       break;
     case 2:
-      lcd.print(sTempLow);
-      lcd.print(" ");
-      lcd.print(sTempCurr);
-      lcd.print(" ");
-      lcd.print(sTempHigh);
+      lcd.print(sTempLow, 0);
+      lcd.print("   ");
+      lcd.print(sTempCurr, 0);
+      lcd.print("   ");
+      lcd.print(sTempHigh, 0);
       break;
     case 3:
-      lcd.print(sAirLow);
-      lcd.print(" ");
-      lcd.print(sAirCurr);
-      lcd.print(" ");
-      lcd.print(sAirHigh);
+      lcd.print(sAirLow, 0);
+      lcd.print("   ");
+      lcd.print(sAirCurr, 0);
+      lcd.print("   ");
+      lcd.print(sAirHigh, 0);
       break;
     default:
       DispDashboard();
       break;
   }
-  
   
 }
 
