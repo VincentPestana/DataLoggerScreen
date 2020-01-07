@@ -154,7 +154,7 @@ void DispDetails(int screenType) {
   lcd.clear();
   lcd.setCursor(0, 0);
 
-  lcd.print("Min   Avg   Max");
+  lcd.print("Min   Curr   Max");
   lcd.setCursor(0, 1);
   
   switch (screenType) {
