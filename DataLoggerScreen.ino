@@ -29,6 +29,8 @@ uint32_t delayMS;
 //  0 - dashboard
 int screen;
 
+bool firstMessageShown;
+
 float joyLR;
 float joyUD;
 
@@ -54,6 +56,7 @@ void setup() {
   sHumLow = 1000;
   sTempLow = 1000;
   sAirLow = 1000;
+  firstMessageShown = false;
 
   // Welcome message and give gas sensor some time to warm up
   lcd.print("  Enviro Sense");
@@ -99,11 +102,11 @@ void loop() {
     // Right
     // TODO: Move max into var
     if (screen > 0)
-      screen--;
+      ChangeScreen(-1);
   } else if (joyLR < 4) {
     // Left
     if (screen < 3)
-      screen++;
+      ChangeScreen(1);
   }
 
   // Set what info is displayed on lcd
@@ -117,6 +120,8 @@ void loop() {
 }
 
 void DispDashboard() {
+  ShowTextMessageOnce("  Dashboard of", "  Information", 2000);
+
   dispCounter++;
 
   // LCD Display
@@ -184,6 +189,25 @@ void DispDetails(int screenType) {
       break;
   }
   
+}
+
+void ChangeScreen(int changeValue) {
+  screen = screen + changeValue;
+  firstMessageShown = false;
+}
+
+// Show a message on the LCD for a amount of time
+void ShowTextMessageOnce(String topLine, String bottomLine, int showTime) {
+  if (firstMessageShown)
+    return;
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(topLine);
+  lcd.setCursor(0, 1);
+  lcd.print(bottomLine);
+  delay(showTime);
+  firstMessageShown = true;
 }
 
 void SerialOutput() {
