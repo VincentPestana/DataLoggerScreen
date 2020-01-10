@@ -120,6 +120,7 @@ void loop() {
   SerialOutput();
 }
 
+// Show current values and uptime
 void DispDashboard() {
   ShowTextMessageOnce("  Dashboard of", "  Information", 2000);
 
@@ -140,6 +141,7 @@ void DispDashboard() {
   lcd.print("UT:");
   lcd.print(millis() / 1000);
 
+  // Display information every few iterations
   if (dispCounter > 10) {
     lcd.clear();
     lcd.setCursor(0, 0);
@@ -152,10 +154,7 @@ void DispDashboard() {
   }
 }
 
-//  show averages
-//  1 - Humidity
-//  2 - Temperature
-//  3 - Air
+//  Show averages
 void DispDetails(int screenType) {
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -165,7 +164,8 @@ void DispDetails(int screenType) {
   
   switch (screenType) {
     case 1:
-      ShowTextMessageOnce("Humidity", "", 2000);
+      // Humidity
+      ShowTextMessageOnce("   Humidity", "", 2000);
       lcd.print(sHumLow, 0);
       lcd.print("   ");
       lcd.print(sHumCurr, 0);
@@ -173,7 +173,8 @@ void DispDetails(int screenType) {
       lcd.print(sHumHigh, 0);
       break;
     case 2:
-      ShowTextMessageOnce("Temperature", "", 2000);
+      // Temperature
+      ShowTextMessageOnce("  Temperature", "", 2000);
       lcd.print(sTempLow, 0);
       lcd.print("   ");
       lcd.print(sTempCurr, 0);
@@ -181,7 +182,8 @@ void DispDetails(int screenType) {
       lcd.print(sTempHigh, 0);
       break;
     case 3:
-      ShowTextMessageOnce("O2 Gas Sensor", "", 2000);
+      // Air
+      ShowTextMessageOnce(" O2 Gas Sensor", "", 2000);
       lcd.print(sAirLow, 0);
       lcd.print("   ");
       lcd.print(sAirCurr, 0);
