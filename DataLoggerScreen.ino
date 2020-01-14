@@ -167,18 +167,18 @@ void DispDetails(int screenType) {
       // Humidity
       ShowTextMessageOnce("   Humidity", "", 2000);
       lcd.print(sHumLow, 0);
-      lcd.print("   ");
+      lcd.print("    ");
       lcd.print(sHumCurr, 0);
-      lcd.print("   ");
+      lcd.print("    ");
       lcd.print(sHumHigh, 0);
       break;
     case 2:
       // Temperature
       ShowTextMessageOnce("  Temperature", "", 2000);
       lcd.print(sTempLow, 0);
-      lcd.print("   ");
+      lcd.print("    ");
       lcd.print(sTempCurr, 0);
-      lcd.print("   ");
+      lcd.print("    ");
       lcd.print(sTempHigh, 0);
       break;
     case 3:
@@ -214,6 +214,9 @@ void ShowTextMessageOnce(String topLine, String bottomLine, int showTime) {
   lcd.print(bottomLine);
   delay(showTime);
   firstMessageShown = true;
+
+  // Clear screen to clear message
+  lcd.clear();
 }
 
 void SerialOutput() {
