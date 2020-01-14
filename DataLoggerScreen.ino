@@ -217,6 +217,10 @@ void ShowTextMessageOnce(String topLine, String bottomLine, int showTime) {
 }
 
 void SerialOutput() {
+  // Check if Serial connection is available
+  if (!Serial)
+    return;
+
   // Print to serial
   Serial.print("Temp: ");
   Serial.print(sTempCurr, 0);
