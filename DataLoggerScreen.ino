@@ -59,6 +59,7 @@ void setup() {
   firstMessageShown = false;
 
   // Welcome message and give gas sensor some time to warm up
+  lcd.setCursor(0, 0);
   lcd.print("  Enviro Sense");
   lcd.setCursor(0, 1);
   lcd.print("  Temp Hum Gas");
@@ -110,7 +111,6 @@ void loop() {
   }
 
   // Set what info is displayed on lcd
-  // TODO: this is just for testing 
   if (screen == 0)
     DispDashboard();
   else {
@@ -159,13 +159,12 @@ void DispDetails(int screenType) {
   lcd.clear();
   lcd.setCursor(0, 0);
 
-  lcd.print("Min   Curr   Max");
-  lcd.setCursor(0, 1);
-  
   switch (screenType) {
     case 1:
       // Humidity
       ShowTextMessageOnce("   Humidity", "", 2000);
+      lcd.print("Min   Curr   Max");
+      lcd.setCursor(0, 1);
       lcd.print(sHumLow, 0);
       lcd.print("    ");
       lcd.print(sHumCurr, 0);
@@ -175,6 +174,8 @@ void DispDetails(int screenType) {
     case 2:
       // Temperature
       ShowTextMessageOnce("  Temperature", "", 2000);
+      lcd.print("Min   Curr   Max");
+      lcd.setCursor(0, 1);
       lcd.print(sTempLow, 0);
       lcd.print("    ");
       lcd.print(sTempCurr, 0);
@@ -184,6 +185,8 @@ void DispDetails(int screenType) {
     case 3:
       // Air
       ShowTextMessageOnce(" O2 Gas Sensor", "", 2000);
+      lcd.print("Min   Curr   Max");
+      lcd.setCursor(0, 1);
       lcd.print(sAirLow, 0);
       lcd.print("   ");
       lcd.print(sAirCurr, 0);
@@ -215,8 +218,9 @@ void ShowTextMessageOnce(String topLine, String bottomLine, int showTime) {
   delay(showTime);
   firstMessageShown = true;
 
-  // Clear screen to clear message
+  // Clean up
   lcd.clear();
+  lcd.setCursor(0, 0);
 }
 
 void SerialOutput() {
