@@ -40,6 +40,9 @@ float sHumLow, sHumHigh, sTempLow, sTempHigh, sAirLow, sAirHigh;
 
 uint16_t dispCounter;
 
+// Keeps a 24 hour history
+int history[24];
+
 void setup() {
   Serial.begin(9600);
   // Initialize device.
@@ -115,6 +118,15 @@ void loop() {
     DispDashboard();
   else {
     DispDetails(screen);
+  }
+
+  // Historical saving of data
+  //  Every 1 hour (1h*60m*60s*1000ms)
+  // TODO : Count time and log into the historyArray, every hour, then reset whats being used to time the hours?
+  if (secondsSinceLog / 3600 == 1) {
+    
+    // Reset
+    secondsSinceLog = 0;
   }
 
   SerialOutput();
