@@ -27,6 +27,9 @@ uint32_t delayMS;
 
 // Screen type being shown
 //  0 - dashboard
+//  1 - Humidity averages
+//  2 - Temperature averages
+//  3 - Gas O2 Averages
 int screen;
 
 bool firstMessageShown;
@@ -42,7 +45,7 @@ uint16_t dispCounter;
 
 // Keeps a 24 hour history
 String history[24];
-int timeSinceLog;
+int currentUptime;
 
 void setup() {
   Serial.begin(9600);
@@ -123,9 +126,10 @@ void loop() {
 
   // Historical saving of data
   //  Every 1 hour (1h*60m*60s*1000ms)
-  timeSinceLog = millis() / 1000 / 60;// / 60;
-  if (history[timeSinceLog] == "") {
-    RecordHistory(timeSinceLog);
+  // DEVELOPER NOTE: Currently testing every minute
+  currentUptime = millis() / 1000 / 60;// / 60;
+  if (history[currentUptime] == "") {
+    RecordHistory(currentUptime);
   }
 
   SerialOutput();
@@ -234,6 +238,7 @@ void ShowTextMessageOnce(String topLine, String bottomLine, int showTime) {
   lcd.setCursor(0, 0);
 }
 
+// Records current values to array at current time slot
 void RecordHistory(int historyIndex) {
   // "[time ago],[humidity],[temperature],[gas]"
   String dataToSave = String(historyIndex) + "," + String(sHumCurr, 0) + "," + String(sTempCurr, 0) + "," + String(sAirCurr, 0);
@@ -242,7 +247,8 @@ void RecordHistory(int historyIndex) {
   Serial.println(dataToSave);
 }
 
-void SerialOutput() {
+// Prints sensor values out to Serial, if available
+void SerialSensorsOutput() {
   // Check if Serial connection is available
   if (!Serial)
     return;
