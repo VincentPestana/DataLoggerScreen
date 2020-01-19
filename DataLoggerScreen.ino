@@ -41,7 +41,8 @@ float sHumLow, sHumHigh, sTempLow, sTempHigh, sAirLow, sAirHigh;
 uint16_t dispCounter;
 
 // Keeps a 24 hour history
-int history[24];
+String history[24];
+int timeSinceLog;
 
 void setup() {
   Serial.begin(9600);
@@ -122,11 +123,9 @@ void loop() {
 
   // Historical saving of data
   //  Every 1 hour (1h*60m*60s*1000ms)
-  // TODO : Count time and log into the historyArray, every hour, then reset whats being used to time the hours?
-  if (secondsSinceLog / 3600 == 1) {
-    
-    // Reset
-    secondsSinceLog = 0;
+  timeSinceLog = millis() / 1000 / 60;// / 60;
+  if (history[timeSinceLog] == "") {
+    RecordHistory(timeSinceLog);
   }
 
   SerialOutput();
@@ -233,6 +232,14 @@ void ShowTextMessageOnce(String topLine, String bottomLine, int showTime) {
   // Clean up
   lcd.clear();
   lcd.setCursor(0, 0);
+}
+
+void RecordHistory(int historyIndex) {
+  // "[time ago],[humidity],[temperature],[gas]"
+  String dataToSave = String(historyIndex) + "," + String(sHumCurr, 0) + "," + String(sTempCurr, 0) + "," + String(sAirCurr, 0);
+  history[historyIndex] = dataToSave;
+
+  Serial.println(dataToSave);
 }
 
 void SerialOutput() {
