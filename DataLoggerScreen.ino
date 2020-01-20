@@ -128,11 +128,11 @@ void loop() {
   //  Every 1 hour (1h*60m*60s*1000ms)
   // DEVELOPER NOTE: Currently testing every minute
   currentUptime = millis() / 1000 / 60;// / 60;
-  if (history[currentUptime] == "") {
+  if ((sizeof(history) >= currentUptime) && (history[currentUptime] == "")) {
     RecordHistory(currentUptime);
   }
 
-  SerialOutput();
+  SerialSensorsOutput();
 }
 
 // Show current values and uptime
