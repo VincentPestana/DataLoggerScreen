@@ -45,6 +45,10 @@ uint16_t dispCounter;
 
 // Keeps a 24 hour history
 String history[24];
+
+// Size of the history array
+int historyLength = 24;
+
 int currentUptime;
 
 void setup() {
@@ -128,7 +132,7 @@ void loop() {
   //  Every 1 hour (1h*60m*60s*1000ms)
   // DEVELOPER NOTE: Currently testing every minute
   currentUptime = millis() / 1000 / 60;// / 60;
-  if ((sizeof(history) >= currentUptime) && (history[currentUptime] == "")) {
+  if ((currentUptime < historyLength) && (history[currentUptime] == "")) {
     RecordHistory(currentUptime);
   }
 
@@ -243,8 +247,6 @@ void RecordHistory(int historyIndex) {
   // "[time ago],[humidity],[temperature],[gas]"
   String dataToSave = String(historyIndex) + "," + String(sHumCurr, 0) + "," + String(sTempCurr, 0) + "," + String(sAirCurr, 0);
   history[historyIndex] = dataToSave;
-
-  Serial.println(dataToSave);
 }
 
 // Prints sensor values out to Serial, if available
