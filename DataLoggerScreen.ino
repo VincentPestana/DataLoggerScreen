@@ -51,6 +51,8 @@ int historyLength = 24;
 
 int currentUptime;
 
+int lastTimeActive;
+
 void setup() {
   Serial.begin(9600);
   // Initialize device.
@@ -222,6 +224,9 @@ void DispDetails(int screenType) {
 void ChangeScreen(int changeValue) {
   screen = screen + changeValue;
   firstMessageShown = false;
+
+  // Record the last time there was user input
+  lastTimeActive = millis();
 }
 
 // Show a message on the LCD for a amount of time
