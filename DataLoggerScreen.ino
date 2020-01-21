@@ -77,6 +77,9 @@ void setup() {
   lcd.setCursor(0, 1);
   lcd.print("  Temp Hum Gas");
   delay(10000);
+
+  // Final initializations
+  lastTimeActive = millis();
 }
 
 void loop() {
@@ -122,6 +125,8 @@ void loop() {
     if (screen < 3)
       ChangeScreen(1);
   }
+
+  Screensaver();
 
   // Set what info is displayed on lcd
   if (screen == 0)
@@ -252,6 +257,14 @@ void RecordHistory(int historyIndex) {
   // "[time ago],[humidity],[temperature],[gas]"
   String dataToSave = String(historyIndex) + "," + String(sHumCurr, 0) + "," + String(sTempCurr, 0) + "," + String(sAirCurr, 0);
   history[historyIndex] = dataToSave;
+}
+
+void Screensaver() {
+  if (millis() - lastTimeActive > 10000) {
+    lcd.noDisplay();
+  } else {
+    lcd.display();
+  }
 }
 
 // Prints sensor values out to Serial, if available
