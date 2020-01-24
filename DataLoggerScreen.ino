@@ -51,7 +51,7 @@ int historyLength = 24;
 
 int currentUptime;
 
-int lastTimeActive;
+long unsigned lastTimeActive;
 
 void setup() {
   Serial.begin(9600);
@@ -114,6 +114,14 @@ void loop() {
   // Controls
   joyLR = map(analogRead(JoyLR), 0, 1006, 0, 10);
   joyUD = map(analogRead(JoyUD), 0, 1006, 0, 10);
+  Serial.println(joyLR);
+  Serial.println(joyUD);
+
+  // Joystick activity for screensaver
+  if (joyLR > 6 || joyLR < 4 || joyUD > 6 || joyUD < 4) {
+    Serial.println("activity");
+    lastTimeActive = millis();
+  }
 
   if (joyLR > 6) {
     // Right
@@ -143,7 +151,7 @@ void loop() {
     RecordHistory(currentUptime);
   }
 
-  SerialSensorsOutput();
+  // SerialSensorsOutput();
 }
 
 // Show current values and uptime
@@ -229,9 +237,6 @@ void DispDetails(int screenType) {
 void ChangeScreen(int changeValue) {
   screen = screen + changeValue;
   firstMessageShown = false;
-
-  // Record the last time there was user input
-  lastTimeActive = millis();
 }
 
 // Show a message on the LCD for a amount of time
@@ -260,9 +265,14 @@ void RecordHistory(int historyIndex) {
 }
 
 void Screensaver() {
-  if (millis() - lastTimeActive > 10000) {
+  Serial.print("last: ");
+  Serial.println(lastTimeActive);
+  Serial.println(millis() - lastTimeActive);
+  if ((millis() - lastTimeActive) < 10000) {
+    // Serial.println("lcd off");
     lcd.noDisplay();
   } else {
+    // Serial.println("lcd on");
     lcd.display();
   }
 }
