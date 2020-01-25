@@ -53,6 +53,8 @@ int currentUptime;
 
 long unsigned lastTimeActive;
 
+int unsigned screensaverWaitTime = 10000;
+
 void setup() {
   Serial.begin(9600);
   // Initialize device.
@@ -119,7 +121,6 @@ void loop() {
 
   // Joystick activity for screensaver
   if (joyLR > 6 || joyLR < 4 || joyUD > 6 || joyUD < 4) {
-    Serial.println("activity");
     lastTimeActive = millis();
   }
 
@@ -265,14 +266,9 @@ void RecordHistory(int historyIndex) {
 }
 
 void Screensaver() {
-  Serial.print("last: ");
-  Serial.println(lastTimeActive);
-  Serial.println(millis() - lastTimeActive);
-  if ((millis() - lastTimeActive) < 10000) {
-    // Serial.println("lcd off");
+  if ((millis() - lastTimeActive) > screensaverWaitTime) {
     lcd.noDisplay();
   } else {
-    // Serial.println("lcd on");
     lcd.display();
   }
 }
