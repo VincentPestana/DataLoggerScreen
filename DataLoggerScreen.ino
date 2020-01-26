@@ -140,13 +140,15 @@ void loop() {
   // Set what info is displayed on lcd
   if (screen == 0)
     DispDashboard();
+  else if (screen == 4) {
+    DispHitory();
+  }
   else {
     DispDetails(screen);
   }
 
   // Historical saving of data
   //  Every 1 hour (1h*60m*60s*1000ms)
-  // DEVELOPER NOTE: Currently testing every minute
   currentUptime = millis() / 1000 / 60;// / 60;
   if ((currentUptime < historyLength) && (history[currentUptime] == "")) {
     RecordHistory(currentUptime);
@@ -233,6 +235,24 @@ void DispDetails(int screenType) {
       break;
   }
   
+}
+
+// History screen, scrollable
+void DispHitory() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  ShowTextMessageOnce("  Historical  ", "", 2000);
+  // No history
+  if (history[0] == "") {
+    lcd.setCursor(0, 0);
+    lcd.print("  Historical  ");
+    lcd.setCursor(0, 0);
+    lcd.print("No previous data");
+  } else {
+    
+  }
+
+
 }
 
 void ChangeScreen(int changeValue) {
